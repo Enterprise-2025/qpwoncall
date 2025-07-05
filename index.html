@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QPWONCall - CRM Telefonico</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- HEADER & DASHBOARD -->
+  <header class="dashboard">
+    <div class="branding">
+      <h1>QPWONCall</h1>
+      <span id="clock"></span>
+    </div>
+    <div class="stats">
+      <span>Lead totali: <b id="statTot"></b></span>
+      <span>Caldi: <b id="statCaldi"></b></span>
+      <span>Tiepidi: <b id="statTiepidi"></b></span>
+      <span>Freddi: <b id="statFreddi"></b></span>
+      <span>App. oggi: <b id="statAppOggi"></b></span>
+      <span>Recall oggi: <b id="statRecall"></b></span>
+      <span>Archiviati: <b id="statArch"></b></span>
+    </div>
+    <div class="controls">
+      <button id="switchModeBtn">Passa a Kanban</button>
+      <button id="btnNewLead">+ Lead</button>
+      <button id="importCsv">Importa CSV</button>
+      <button id="exportCsv">Export CSV</button>
+      <button id="clearAll">Svuota Tutto</button>
+      <span id="pomodoro">
+        <span id="timer">25:00</span>
+        <button id="start">▶️</button>
+        <button id="reset">⟲</button>
+      </span>
+    </div>
+    <!-- BARRA XP e PROFILO GAMER -->
+    <div class="gamer-bar">
+      <div id="xp-bar-container">
+        <span id="gamerLevel">Lv. 1</span>
+        <div id="xp-bar-bg">
+          <div id="xp-bar"></div>
+        </div>
+        <span id="xpValue">0 XP</span>
+      </div>
+      <button id="openGamerProfile" title="Profilo Gamer"><img src="https://img.icons8.com/color/48/000000/trophy.png" style="width:32px;height:32px;vertical-align:middle;" alt="Badge"></button>
+    </div>
+  </header>
+
+  <!-- MISSIONI GIORNALIERE - visibili sotto la dashboard -->
+  <section class="missioni">
+    <h2>🎮 Missioni giornaliere</h2>
+    <ul id="missionList">
+      <!-- Popolato via JS -->
+    </ul>
+  </section>
+
+  <!-- FILTRI KANBAN -->
+  <section class="filterbar kanban-only">
+    <input id="searchInput" placeholder="Cerca struttura, città, telefono...">
+    <select id="filterState">
+      <option value="">Tutti gli stati</option>
+      <option value="da_lavorare">Da lavorare</option>
+      <option value="in_lavorazione">In lavorazione</option>
+      <option value="successo">Successo</option>
+      <option value="chiuso">Chiuso/archiviato</option>
+    </select>
+    <select id="filterCalore">
+      <option value="">Tutti i calori</option>
+      <option value="caldo">Caldi</option>
+      <option value="tiepido">Tiepidi</option>
+      <option value="freddo">Freddi</option>
+    </select>
+    <select id="filterTag">
+      <option value="">Tutti i tag</option>
+      <!-- Generato dinamicamente -->
+    </select>
+    <select id="filterRecall">
+      <option value="">Recall/Task</option>
+      <option value="oggi">Da richiamare oggi</option>
+      <option value="settimana">Settimana</option>
+      <option value="no">No recall</option>
+    </select>
+  </section>
+
+  <!-- KANBAN BOARD (default: hidden) -->
+  <main class="kanban" id="kanbanBoard" style="display:none">
+    <section class="kanban-col" id="col-dalavorare">
+      <h2>🟦 Da Lavorare</h2>
+      <ul id="listDaLavorare" class="lead-list"></ul>
+    </section>
+    <section class="kanban-col" id="col-inlavorazione">
+      <h2>🟧 In Lavorazione</h2>
+      <ul id="listInLavorazione" class="lead-list"></ul>
+    </section>
+    <section class="kanban-col" id="col-successo">
+      <h2>🟩 Successo</h2>
+      <ul id="listSuccesso" class="lead-list"></ul>
+    </section>
+    <section class="kanban-col" id="col-chiusi">
+      <h2>🗃️ Archiviati/Chiusi</h2>
+      <ul id="listChiusi" class="lead-list"></ul>
+    </section>
+  </main>
+
+  <!-- ONE LEAD MODE (default: visible) -->
+  <main id="oneLeadMode">
+    <div class="one-lead-container">
+      <div id="oneLeadPanel" class="one-lead-panel">
+        <!-- Caricato via JS -->
+      </div>
+      <div class="one-lead-actions">
+        <button id="btnLeadPrev">← Precedente</button>
+        <button id="btnLeadNext">Successivo →</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL NUOVO LEAD -->
+  <div id="leadModal" class="modal hidden">
+    <div class="modal-dialog">
+      <h3>Nuovo Lead</h3>
+      <input id="inputNome" placeholder="Struttura*" required>
+      <input id="inputReferente" placeholder="Referente">
+      <input id="inputTelefono" placeholder="Telefono">
+      <input id="inputCitta" placeholder="Città*" required>
+      <input id="inputFonte" placeholder="Fonte / Referenza">
+      <button id="saveLead">Salva</button>
+      <button id="cancelLead">Annulla</button>
+    </div>
+  </div>
+
+  <!-- MODAL DETTAGLIO / LOG / TAG -->
+  <div id="detailModal" class="modal hidden">
+    <div class="modal-dialog">
+      <button id="closeDetail" class="close-btn">×</button>
+      <h3>Dettaglio Lead</h3>
+      <div id="detailContent"></div>
+      <button id="saveDetail">Salva</button>
+    </div>
+  </div>
+
+  <!-- MODAL TAGGING -->
+  <div id="tagModal" class="modal hidden">
+    <div class="modal-dialog">
+      <button id="closeTag" class="close-btn">×</button>
+      <h3>Gestione Tag Lead</h3>
+      <div id="tagContent"></div>
+      <button id="saveTag">Salva Tag</button>
+    </div>
+  </div>
+
+  <!-- MODAL EXPORT TXT -->
+  <div id="exportTxtModal" class="modal hidden">
+    <div class="modal-dialog">
+      <h3>Export Esito Lead (per Salesforce, WhatsApp, ecc)</h3>
+      <textarea id="exportTxtArea" readonly style="width:98%;min-height:130px"></textarea>
+      <button id="copyExportTxt">Copia negli appunti</button>
+      <button id="closeExportTxt">Chiudi</button>
+    </div>
+  </div>
+
+  <!-- MODAL PROFILO GAMER -->
+  <div id="gamerProfileModal" class="modal hidden">
+    <div class="modal-dialog gamer-profile-dialog">
+      <button id="closeGamerProfile" class="close-btn">×</button>
+      <h2>🏆 Profilo Gamer</h2>
+      <div class="gamer-profile-section">
+        <div><b>Livello:</b> <span id="profileLevel"></span></div>
+        <div><b>XP:</b> <span id="profileXP"></span></div>
+        <div id="profileXPBarBg"><div id="profileXPBar"></div></div>
+      </div>
+      <div class="gamer-profile-section">
+        <h3>🎖️ Badge Sbloccati</h3>
+        <div id="profileBadges">
+          <!-- Badge via JS -->
+        </div>
+      </div>
+      <div class="gamer-profile-section">
+        <h3>🎯 Missioni Giornaliere</h3>
+        <ul id="profileMissions">
+          <!-- Missioni via JS -->
+        </ul>
+      </div>
+      <div class="gamer-profile-section">
+        <h3>📊 Statistiche Personali</h3>
+        <ul id="profileStats">
+          <!-- Statistiche via JS -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILE IMPORT -->
+  <input type="file" id="fileImport" accept=".csv" style="display:none">
+
+  <!-- TEMPLATE CARD LEAD -->
+  <template id="tpl-lead-card">
+    <li class="lead-card" draggable="true">
+      <div class="lead-title"></div>
+      <div class="lead-meta"></div>
+      <div class="lead-tags"></div>
+      <div class="lead-actions"></div>
+      <div class="lead-qualifica"></div>
+      <div class="lead-badge"></div>
+    </li>
+  </template>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="hidden"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
