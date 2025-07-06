@@ -195,13 +195,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ======= UTILS QUALIFICA =======
   const QUALIFICA = [
-    "1. Esiste un'urgenza o esigenza da risolvere?",
-    "2. Il referente è il decisore?",
-    "3. Hanno già valutato soluzioni simili?",
-    "4. Sono attenti alla visibilità digitale?",
-    "5. Mostrano interesse concreto?",
-    "6. Hanno già dati o numeri chiari?",
-    "7. Sono pronti ad agire subito?"
+    "1. C’è qualcosa di urgente che volete risolvere in questo periodo?",
+    "2. Chi si occupa normalmente di prendere queste decisioni nella vostra struttura?",
+    "3. Avete già dato un’occhiata ad altre soluzioni, magari simili a quella di cui parliamo?",
+    "4. Quanto è importante per voi, oggi, essere visibili anche online?",
+    "5. Mi sembra di capire che l’argomento le interessa:Corretto?",
+    "6. Avete già qualche numero o dato che vi aiuta a capire meglio la situazione?",
+    "7. Secondo lei, se trovassimo la soluzione giusta, sareste pronti a partire già a breve?"
   ];
   function countYes(ans) { return Object.values(ans || {}).filter(x => x === 'si').length; }
   function getCalore(ans) { const c = countYes(ans); if (c >= 3) return 'caldo'; if (c === 2) return 'tiepido'; return 'freddo'; }
