@@ -195,13 +195,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ======= UTILS QUALIFICA =======
   const QUALIFICA = [
-    "1. C’è qualcosa di urgente che volete risolvere in questo periodo?",
-    "2. Chi si occupa normalmente di prendere queste decisioni nella vostra struttura?",
-    "3. Avete già dato un’occhiata ad altre soluzioni, magari simili a quella di cui parliamo?",
-    "4. Quanto è importante per voi, oggi, essere visibili anche online?",
-    "5. Mi sembra di capire che l’argomento le interessa:Corretto?",
-    "6. Avete già qualche numero o dato che vi aiuta a capire meglio la situazione?",
-    "7. Secondo lei, se trovassimo la soluzione giusta, sareste pronti a partire già a breve?"
+    "1. Esiste un'urgenza o esigenza da risolvere?",
+    "2. Il referente è il decisore?",
+    "3. Hanno già valutato soluzioni simili?",
+    "4. Sono attenti alla visibilità digitale?",
+    "5. Mostrano interesse concreto?",
+    "6. Hanno già dati o numeri chiari?",
+    "7. Sono pronti ad agire subito?"
   ];
   function countYes(ans) { return Object.values(ans || {}).filter(x => x === 'si').length; }
   function getCalore(ans) { const c = countYes(ans); if (c >= 3) return 'caldo'; if (c === 2) return 'tiepido'; return 'freddo'; }
@@ -314,7 +314,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   function getScriptSuggerito(lead) {
     if (!lead.referente || lead.referente.toLowerCase().includes('segretaria')) return `Buongiorno, sono [TUO NOME] di MioDottore. Collaboriamo con studi medici per semplificare la gestione appuntamenti, ridurre chiamate perse e aumentare efficienza. Posso parlare con il Dott. [NOME]?`;
-    return `Buongiorno Dott. ${lead.referente || ''}, sono [TUO NOME] di MioDottore. Sto lavorando con diverse strutture per semplificare la gestione delle prenotazioni e rispondere più facilmente alle richieste dei pazienti.C’è una persona di riferimento, magari il direttore o il responsabile dell’organizzazione, con cui potrei confrontarmi su questi temi?”
+    return `Buongiorno Dott. ${lead.referente || ''}, sono [TUO NOME] di MioDottore. Aiutiamo studi come il suo a crescere fino al 20% ottimizzando i flussi di prenotazione. Le bastano 10 minuti per mostrarle i risultati concreti?`;
+  }
   function handleOneLeadAction(action, lidx) {
     let lead = leads[lidx];
     if (action === 'appuntamento') {
