@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   function getScriptSuggerito(lead) {
     if (!lead.referente || lead.referente.toLowerCase().includes('segretaria')) return `Buongiorno, sono [TUO NOME] di MioDottore. Collaboriamo con studi medici per semplificare la gestione appuntamenti, ridurre chiamate perse e aumentare efficienza. Posso parlare con il Dott. [NOME]?`;
-    return `Buongiorno Dott. ${lead.referente || ''}, sono [TUO NOME] di MioDottore. Aiutiamo studi come il suo a crescere fino al 20% ottimizzando i flussi di prenotazione. Le bastano 10 minuti per mostrarle i risultati concreti?`;
+    return `Buongiorno Dott. ${lead.referente || ''}, sono [TUO NOME] di MioDottore. Sto lavorando con diverse strutture che utilizzano MioDottore per semplificare la gestione delle prenotazioni e rispondere più facilmente alle richieste dei pazienti. C'è una persona di riferimento con cui potrei confrontarmi su questi temi? Mi sa dire quando potrei trovarlo?`;
   }
   function handleOneLeadAction(action, lidx) {
     let lead = leads[lidx];
